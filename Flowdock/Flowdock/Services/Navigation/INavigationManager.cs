@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Flowdock.Services.Navigation {
 	public interface INavigationManager
@@ -11,6 +12,6 @@ namespace Flowdock.Services.Navigation {
 		void GoToLobby();
 		void GoToFlow(Flow flow);
 		void GoToUsers(string flowId);
-        void GoToMessageThread(string flowId, int threadId);
+        void GoToMessageThread(string flowId, int threadId, Color? threadColor);
 	}
 }

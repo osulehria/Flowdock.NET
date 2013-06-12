@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using Message = Flowdock.Client.Domain.Message;
 
@@ -148,8 +149,7 @@ namespace Flowdock.ViewModels {
 
 				AssociateAvatarsToMessages();
 				AssignThreadStartersTheirColor();
-
-				StartStream();
+                StartStream();
 			} finally {
 				_progressService.Hide();
 				NotifyOfPropertyChange(() => CanSendMessageToFlow);
@@ -207,7 +207,6 @@ namespace Flowdock.ViewModels {
 			}
 			private set {
 				_messages = value;
-                _messages.CollectionChanged += (o, e) => TrimMessages();
 				NotifyOfPropertyChange(() => Messages);
 				NotifyOfPropertyChange(() => FlowStatusMessage);
 			}

@@ -20,7 +20,7 @@ namespace Flowdock.ViewModels {
 		public MessageViewModel(Message message, string flowId, Color? threadColor, INavigationManager navigationManager) {
 			_message = message.ThrowIfNull("message");
 			_threadColor = threadColor;
-            _goToMessageThreadCommand = new GoToMessageThreadCommand(flowId, navigationManager);
+            _goToMessageThreadCommand = new GoToMessageThreadCommand(flowId, navigationManager, _threadColor);
 		}
 
 		public DateTime TimeStamp {

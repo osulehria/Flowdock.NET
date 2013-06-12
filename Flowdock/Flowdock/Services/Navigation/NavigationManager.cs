@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Flowdock.Services.Navigation {
 	public class NavigationManager : INavigationManager {
@@ -35,10 +36,11 @@ namespace Flowdock.Services.Navigation {
 				.Navigate();
 		}
 
-        public void GoToMessageThread(string flowId, int threadId) {
+        public void GoToMessageThread(string flowId, int threadId, Color? threadColor) {
             _navigationService.UriFor<MessageThreadViewModel>()
                 .WithParam<string>(mtvm => mtvm.FlowId, flowId)
                 .WithParam<int>(mtvm => mtvm.ThreadId, threadId)
+                .WithParam<string>(mtvm => mtvm.ThreadColor, threadColor.HasValue ? threadColor.ToString() : null)
                 .Navigate();
         }
 	}

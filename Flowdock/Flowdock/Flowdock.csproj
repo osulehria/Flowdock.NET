@@ -113,6 +113,7 @@
     <Compile Include="Services\Navigation\NavigationManager.cs" />
     <Compile Include="Services\Progress\IProgressService.cs" />
     <Compile Include="Services\Progress\ProgressService.cs" />
+    <Compile Include="Services\Util\ColorConverter.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\AppSettings.cs" />
     <Compile Include="Settings\DebugLoginInfo.cs" />

@@ -12,6 +12,8 @@ using Message = Flowdock.Client.Domain.Message;
 
 using Flowdock.Extensions;
 using Flowdock.Client.Domain;
+using System.Windows.Media;
+using Flowdock.Services.Util;
 
 namespace Flowdock.ViewModels {
     public class MessageThreadViewModel : PropertyChangedBase, IActivate {
@@ -20,6 +22,8 @@ namespace Flowdock.ViewModels {
         private INavigationManager _navigationManager;
 
         private string _flowName;
+
+        private ObservableCollection<User> _users;
         private ObservableCollection<MessageViewModel> _messages;
 
         public MessageThreadViewModel(IFlowdockContext context, INavigationManager navigationManager, IProgressService progressService) {
@@ -28,27 +32,50 @@ namespace Flowdock.ViewModels {
             _progressService = progressService.ThrowIfNull("progressService");
         }
 
+
         private async void LoadMessageThread() {
             _progressService.Show("");
 
             try {
                 Flow flow = await _context.GetFlow(FlowId);
                 FlowName = flow.Name;
+                Users = new ObservableCollection<User>(flow.Users);
                 
                 IEnumerable<Message> messages = await _context.GetMessagesForThread(FlowId, ThreadId);
 
+                // Converts string to Color
+                Color? threadColor = ColorConverter.ConvertFromArgbString(ThreadColor);
+
                 if (messages != null) {
                     Messages = new ObservableCollection<MessageViewModel>(
-                        messages.Where(m => m.Displayable).Select(m => new MessageViewModel(m, FlowId, null, _navigationManager))
+                        messages.Where(m => m.Displayable).Select(m => new MessageViewModel(m, FlowId, threadColor, _navigationManager))
                     );
                 }
+
+                AssociateAvatarsToMessages();
             } finally {
                 _progressService.Hide();
             }
         }
 
+        private void AssociateAvatarsToMessages() {
+            if (_messages != null) {
+                foreach (var msg in _messages) {
+                    FindAvatar(msg);
+                }
+            }
+        }
+
+        private void FindAvatar(MessageViewModel msg) {
+            var user = _users.FirstOrDefault(u => u.Id == msg.UserId);
+            if (user != null) {
+                msg.Avatar = user.Avatar;
+            }
+        }
+
         public string FlowId { get; set; }
         public int ThreadId { get; set; }
+        public string ThreadColor { get; set; }
         
         public string FlowName {
             get {
@@ -57,6 +84,16 @@ namespace Flowdock.ViewModels {
             set {
                 _flowName = value;
                 NotifyOfPropertyChange(() => FlowName);
+            }
+        }
+
+        public ObservableCollection<User> Users {
+            get {
+                return _users;
+            }
+            private set {
+                _users = value;
+                NotifyOfPropertyChange(() => Users);
             }
         }
 
