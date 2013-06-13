@@ -10,7 +10,10 @@ namespace Flowdock.Client.Context {
 		Task<IEnumerable<Flow>> GetCurrentFlows();
 		Task<Flow> GetFlow(string id);
 		Task<IEnumerable<Message>> GetMessagesForFlow(string id);
-        Task<IEnumerable<Message>> GetMessagesForThread(string flowId, int threadId);
+        
+        // TODO: This is a hack, find out a way to get all messages of a thread in one task call.
+        Task<IEnumerable<Message>> GetFirstMessageForThread(string flowId, int threadId);
+        Task<IEnumerable<Message>> GetRestOfMessagesForThread(string flowId, int threadId);
 
 		void SendMessage(string flowId, string message);
 	}

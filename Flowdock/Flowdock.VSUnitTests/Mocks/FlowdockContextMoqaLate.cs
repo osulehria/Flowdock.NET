@@ -233,7 +233,7 @@ message.Equals(SendMessageParameter_message_LastCalledWith) );
         }
 
 
-        public Task<IEnumerable<Message>> GetMessagesForThread(string flowId, int threadId) {
+        public Task<IEnumerable<Message>> GetRestOfMessagesForThread(string flowId, int threadId) {
             throw new System.NotImplementedException();
         }
 }

@@ -32,7 +32,6 @@ namespace Flowdock.ViewModels {
             _progressService = progressService.ThrowIfNull("progressService");
         }
 
-
         private async void LoadMessageThread() {
             _progressService.Show("");
 
@@ -40,10 +39,13 @@ namespace Flowdock.ViewModels {
                 Flow flow = await _context.GetFlow(FlowId);
                 FlowName = flow.Name;
                 Users = new ObservableCollection<User>(flow.Users);
-                
-                IEnumerable<Message> messages = await _context.GetMessagesForThread(FlowId, ThreadId);
 
-                // Converts string to Color
+                IEnumerable<Message> firstMessage = await _context.GetFirstMessageForThread(FlowId, ThreadId);
+                IEnumerable<Message> restOfMessages = await _context.GetRestOfMessagesForThread(FlowId, ThreadId);
+
+                IEnumerable<Message> messages = firstMessage.Concat(restOfMessages);
+
+                // Converts string to Color using our own utility (ColorConverter doesn't exist in WP8)
                 Color? threadColor = ColorConverter.ConvertFromArgbString(ThreadColor);
 
                 if (messages != null) {

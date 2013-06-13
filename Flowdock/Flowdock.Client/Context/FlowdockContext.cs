@@ -28,6 +28,10 @@ namespace Flowdock.Client.Context {
             return client;
         }
 
+        private Task<IEnumerable<Message>> GetMessages(string resource) {
+            return GetCollection<Message>(resource);
+        }
+
 		public FlowdockContext(string username, string password) {
 			_username = username;
 			_password = password;
@@ -51,7 +55,12 @@ namespace Flowdock.Client.Context {
 			return tcs.Task;
 		}
 
-        public Task<IEnumerable<Message>> GetMessagesForThread(string flowId, int threadId) {
+        // TODO: This is a hack, find out a way to get all messages of a thread in one task call.
+        public Task<IEnumerable<Message>> GetFirstMessageForThread(string flowId, int threadId) {
+            return GetMessages(string.Format("flows/{0}/messages?id={1}", flowId.Replace(":", "/"), threadId));
+        }
+
+        public Task<IEnumerable<Message>> GetRestOfMessagesForThread(string flowId, int threadId) {
             string resource = string.Format("flows/{0}/messages?tags=influx:{1}", flowId.Replace(":", "/"), threadId);
             return GetCollection<Message>(resource);
         }
